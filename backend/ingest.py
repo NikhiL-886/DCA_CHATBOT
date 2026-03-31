@@ -2,42 +2,32 @@ import json
 import os
 from dotenv import load_dotenv
 
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_chroma import Chroma
-
 load_dotenv()
 
-CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")
+DATASET_PATH = os.getenv("DATASET_PATH", "./dataset.json")
 
-def ingest_data():
-    if not os.path.exists("dataset.json"):
-        print("dataset.json not found!")
+def validate_dataset():
+    if not os.path.exists(DATASET_PATH):
+        print(f"{DATASET_PATH} not found!")
         return
-        
-    with open("dataset.json", "r") as f:
+    
+    with open(DATASET_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    # ✅ FREE embeddings (no API key needed)
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
-    )
+    if not isinstance(data, list):
+        print("Invalid dataset format. Expected a list of objects.")
+        return
 
-    # Prepare document texts and metadatas
-    texts = [f"Q: {item['question']}\nA: {item['answer']}" for item in data]
-    metadatas = [{"question": item["question"]} for item in data]
-    ids = [str(i) for i in range(len(data))]
-    
-    # Store in ChromaDB
-    print("Ingesting data into ChromaDB...")
-    vectorstore = Chroma.from_texts(
-        texts=texts,
-        embedding=embeddings,
-        metadatas=metadatas,
-        ids=ids,
-        persist_directory=CHROMA_PERSIST_DIR
-    )
-    
-    print(f"Successfully ingested {len(data)} Q&A pairs into ChromaDB.")
+    invalid_rows = [
+        idx for idx, item in enumerate(data)
+        if not isinstance(item, dict) or "question" not in item or "answer" not in item
+    ]
+
+    if invalid_rows:
+        print(f"Dataset has invalid rows at indexes: {invalid_rows[:10]}")
+        return
+
+    print(f"Dataset looks good. Loaded {len(data)} Q&A pairs.")
 
 if __name__ == "__main__":
-    ingest_data()
+    validate_dataset()
