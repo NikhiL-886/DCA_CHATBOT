@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import asyncio
 from difflib import SequenceMatcher
 from typing import List
 from fastapi import FastAPI, HTTPException
@@ -110,6 +111,18 @@ def build_context(matches: list[dict], max_chars: int = 14000) -> str:
 
     return "\n\n".join(chunks)
 
+
+def get_direct_answer_if_confident(matches: list[dict]) -> str | None:
+    if not matches:
+        return None
+
+    threshold = float(os.getenv("DIRECT_MATCH_THRESHOLD", "0.63"))
+    top = matches[0]
+    if top.get("hybrid_score", 0.0) >= threshold:
+        return top.get("answer")
+
+    return None
+
 def init_app():
     global llm, dataset, bm25, bm25_corpus_tokens
 
@@ -161,6 +174,12 @@ async def chat_endpoint(query: ChatQuery):
         top_k = int(os.getenv("RETRIEVAL_TOP_K", "12"))
         max_context_chars = int(os.getenv("MAX_CONTEXT_CHARS", "14000"))
         matches = get_top_matches(query.message, k=top_k)
+
+        # Fast path: if retrieval is very confident, avoid LLM call (prevents quota/rate failures)
+        direct_answer = get_direct_answer_if_confident(matches)
+        if direct_answer:
+            return {"response": direct_answer}
+
         context = build_context(matches, max_chars=max_context_chars)
 
         recent_history = query.history[-6:] if query.history else []
@@ -189,25 +208,53 @@ Student Question:
 
 Assistant Answer:"""
 
-        # 🤖 Step 3: Generate response
-        response = llm.generate_content(
-            final_prompt,
-            generation_config={
-                "temperature": 0.4,
-                "max_output_tokens": 500
-            }
-        )
+        # 🤖 Step 3: Generate response (with lightweight retries for transient/quota issues)
+        max_retries = int(os.getenv("GEMINI_MAX_RETRIES", "2"))
+        last_error = None
 
-        # Check if the response was blocked or empty
-        if response and response.text:
-            return {"response": response.text}
-        else:
-            return {"response": "I'm sorry, I couldn't process that. Please try rephrasing your question."}
+        for attempt in range(max_retries + 1):
+            try:
+                response = llm.generate_content(
+                    final_prompt,
+                    generation_config={
+                        "temperature": 0.4,
+                        "max_output_tokens": 500
+                    }
+                )
+
+                if response and response.text:
+                    return {"response": response.text}
+
+                return {"response": "I'm sorry, I couldn't process that. Please try rephrasing your question."}
+
+            except Exception as gen_error:
+                last_error = gen_error
+                err_text = str(gen_error).lower()
+                is_retryable = any(
+                    token in err_text
+                    for token in ["429", "quota", "resource_exhausted", "temporarily", "timeout", "503", "unavailable"]
+                )
+
+                if attempt < max_retries and is_retryable:
+                    await asyncio.sleep(1.2 * (attempt + 1))
+                    continue
+                break
+
+        # Final fallback: return top retrieved answer if available
+        if matches:
+            return {
+                "response": (
+                    f"I had a temporary AI service issue, but based on available department data:\n\n"
+                    f"{matches[0].get('answer', "Please try again shortly.")}"
+                )
+            }
+
+        print(f"Server Error after retries: {str(last_error) if last_error else 'Unknown Gemini error'}")
+        return {"response": "I'm having trouble connecting to my brain (AI service). Please try again in a moment."}
 
     except Exception as e:
         print(f"Server Error: {str(e)}")
-        # If the API key is invalid or quota is hit, it will show here
-        return {"response": "I'm having trouble connecting to my brain (AI service). Please try again in a moment."}
+        raise HTTPException(status_code=500, detail="Internal server error while processing chat.")
 
 @app.get("/health")
 def health():
