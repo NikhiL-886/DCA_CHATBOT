@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, GraduationCap, Info, HelpCircle, Bot } from "lucide-react";
+import { Send, GraduationCap, Info, HelpCircle } from "lucide-react";
 import Image from "next/image"; 
 import RobotAssistant from "@/components/RobotAssistant";
 import ChatMessage from "@/components/ChatMessage";
