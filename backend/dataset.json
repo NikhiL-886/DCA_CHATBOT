@@ -1,0 +1,189 @@
+[
+  {"question": "What is the fee for BCA?", "answer": "The fee for the BCA program is ₹1,20,000 per year."},
+  {
+  "question": "Are admissions open for 2026–2027 in Department of Computer Application (BCA/MCA)?",
+  "answer": "Admissions for 2026–2027 are not open yet. Please check https://csjmu.ac.in/ for updates. Once released, you can apply through https://csjmu.ac.in/admissions202526/."
+},
+
+  {
+    "question": "What courses are offered in Department of Computer Application?",
+    "answer": "The Department of Computer Application offers BCA (3 years, 6 semesters) and MCA (2 years, 4 semesters)."
+  },
+  {
+    "question": "What does NAAC A++ mean?",
+    "answer": "NAAC A++ is the highest accreditation grade awarded by the National Assessment and Accreditation Council (NAAC), indicating exceptional academic quality, infrastructure, research, and overall institutional excellence."
+  },
+  {
+    "question": "What is NIRF ranking?",
+    "answer": "NIRF (National Institutional Ranking Framework) is a ranking system by the Ministry of Education, Government of India, that evaluates institutions based on parameters like teaching, research, graduation outcomes, outreach, and perception to help students choose quality institutions."
+  },
+  {
+    "question": "Is CSJM University recognized by UGC?",
+    "answer": "Yes, Chhatrapati Shahu Ji Maharaj University (CSJM University) is recognized by the University Grants Commission (UGC). It is also accredited by NAAC and approved by professional councils like AICTE and PCI."
+  },
+  {
+    "question": "Who is the HOD of Department of Computer Application?",
+    "answer": "Dr. Pushpa Mamoria is the HOD of the Department of Computer Application. She is an Associate Professor with research interests in AI, Machine Learning, IoT, and related fields. Contact: pushpamamoria@csjmu.ac.in, Phone: 9455816503."
+  },
+  {
+    "question": "What is the admission process for BCA?",
+    "answer": "For BCA (3 years, AICTE approved), candidates must have passed 10+2 with Mathematics. Admissions are based on merit through the CSJMU Admission Portal. Apply here: https://csjmu.ac.in/admissions202526/."
+  },
+{
+    "question": "What subjects are taught in BCA 1 sem?",
+    "answer": "BCA 1st semester subjects include Computer Fundamentals & Problem Solving Techniques, C Programming, Principles of Management, Business Communication, Mathematics-I, and practical labs for Office Automation and C Programming."
+  },
+  {
+    "question": "What subjects are taught in BCA 2 sem?",
+    "answer": "BCA 2nd semester subjects include Object Oriented Programming using C++, Internet Technology and Web Design, Organizational Behavior, Financial Accounting & Management, Mathematics-II, and practical lab for C++ Programming."
+  },
+  {
+    "question": "What subjects are taught in BCA 3 sem?",
+    "answer": "BCA 3rd semester subjects include Python Programming, Data Structures using C & C++, Operating System, Digital Electronics & Computer Organization, Elements of Statistics, and practical labs for Python and Data Structures."
+  },
+  {
+    "question": "What subjects are taught in BCA 4 sem?",
+    "answer": "BCA 4th semester subjects include Computer Graphics & Animation, Database Management System, Software Engineering, Optimization Techniques, Mathematics-III, and Computer Graphics & DBMS lab."
+  },
+  {
+    "question": "What subjects are taught in BCA 5 sem?",
+    "answer": "BCA 5th semester subjects include Knowledge Management, Java Programming & Dynamic Webpage Design, Computer Networks, Numerical Methods, Minor Project, Viva-Voce on Summer Training, and Java Programming lab."
+  },
+  {
+    "question": "What subjects are taught in BCA 6 sem?",
+    "answer": "BCA 6th semester subjects include Information & Cyber Security, Internet of Things, E-Commerce, Data Science & Machine Learning, Major Project, and Seminar/Presentation based on the project."
+  },
+  {
+    "question": "What is the course duration BCA?",
+    "answer": "The BCA course duration is 3 years with 6 semesters."
+  },
+  {
+    "question": "What is the course duration MCA?",
+    "answer": "The MCA course duration is 2 years with 4 semesters."
+  },
+   {
+    "question": "What is the eligibility for BCA?",
+    "answer": "Candidates must have passed 10+2. Admission is based on merit."
+  },
+  {
+    "question": "What is the eligibility for MCA?",
+    "answer": "Candidates must have a graduation degree with Mathematics, or graduation in any stream with Mathematics in 12th. Admission is through a screening test and/or programming test."
+  },
+  {
+    "question": "How is admission done for BCA?",
+    "answer": "For BCA admission, candidates need to apply online by paying a ₹350 application fee. Required documents include caste/domicile certificate, 10th and 12th marksheets (minimum 60% in 12th), TC/character certificate, Aadhaar card of student and parents. Admission is based on merit, and selected candidates are informed via email."
+  },
+   {
+    "question": "How is admission done for MCA?",
+    "answer": "For MCA admission, candidates must fill out the online application form. After that, a screening test and/or coding test is conducted. Merit lists are prepared category-wise (General, OBC, SC, ST, EWS). Selected candidates are called for admission. Required documents include graduation marksheets and degree (no backlog or fail allowed), 10th and 12th marksheets, caste/domicile certificate, TC/character certificate, Aadhaar card of student and parents, and payment of the application fee."
+  },
+  {
+    "question": "Who is the BCA admission coordinator?",
+    "answer": "For admission-related queries (10:00 AM - 5:00 PM), contact Mrs. Mamata M. Panda (Convenor) at 9451523634 or Dr. Ritesh Agarwal (BCA) at 9389998771."
+  },
+  {
+    "question": "How many seats are available in BCA?",
+    "answer": "Approximately 400 seats are available in the BCA program."
+  },
+  {
+    "question": "How many seats are available in MCA?",
+    "answer": "Approximately 120 seats are available in the MCA program."
+  },
+  {
+    "question": "Who is the MCA admission coordinator?",
+    "answer": "For admission-related queries (10:00 AM - 5:00 PM), contact Mrs. Mamata M. Panda (Convenor) at 9451523634 or Mr. Prashant Srivastava (MCA) at 9653035620."
+  },
+   {
+    "question": "What is the application fee for BCA?",
+    "answer": "The application fee for BCA is ₹350."
+  },
+  {
+    "question": "What is the application fee for MCA?",
+    "answer": "The application fee for MCA is ₹350."
+  },
+   {
+    "question": "Is there any entrance exam for BCA admission?",
+    "answer": "No, there is no entrance exam for BCA admission. Admission is based on merit from the 12th standard."
+  },
+  {
+    "question": "Is there any entrance exam for MCA admission?",
+    "answer": "Yes, there is a screening test and/or programming test for MCA admission."
+  },
+   {
+    "question": "What subjects are taught in MCA 1 sem?",
+    "answer": "MCA 1st semester subjects include Fundamentals of Computers & Emerging Technologies, Problem Solving using C, Principles of Management & Communication, Discrete Mathematics, Computer Organization & Architecture, and practical labs for C Programming and Professional Communication."
+  },
+  {
+    "question": "What subjects are taught in MCA 2 sem?",
+    "answer": "MCA 2nd semester subjects include Theory of Automata & Formal Languages, Object Oriented Programming, Operating Systems, Database Management Systems, Data Structures & Analysis of Algorithms, and practical labs for DBMS and OOP/Data Structures."
+  },
+  {
+    "question": "What subjects are taught in MCA 3 sem?",
+    "answer": "MCA 3rd semester subjects include Computer Networks, Artificial Intelligence, Software Engineering, Elective 1, Elective 2, Universal Human Values, Software Engineering Lab, and Mini Project (AI/ISCL)."
+  },
+  {
+    "question": "What subjects are taught in MCA 4 sem?",
+    "answer": "MCA 4th semester subjects include Elective 3, Elective 4, Elective 5, and a Major Project."
+  },
+  {
+    "question": "How can I contact the department for admission queries?",
+    "answer": "For admission-related queries (10:00 AM - 5:00 PM), contact Mrs. Mamata M. Panda (Convenor) at 9451523634 or Mr. Prashant Srivastava (MCA) at 9653035620."
+  },
+  {
+    "question": "What is the official website of CSJM University?",
+    "answer": "The official website of CSJM University is https://csjmu.ac.in/."
+  },
+  {
+    "question": "Where is the registration link?",
+    "answer": "You can register for admissions at https://csjmu.ac.in/admissions202526/."
+  },
+  {
+    "question": "What steps does the department take for placements?",
+    "answer": "The department has tie-ups with many top industries and provides internship opportunities, pre-placement training, and placement support. The highest package is around 15 LPA and the average package is around 4.5 LPA. There is a dedicated placement cell, and students get access through their college email. Visit: https://placement.csjmu.ac.in/."
+  },
+  {
+    "question": "How can I prepare for IT jobs?",
+    "answer": "Students should focus on programming skills, data structures, problem-solving, projects, internships, and practicing coding on platforms like LeetCode and GeeksforGeeks."
+  },
+  {
+    "question": "What skills do companies expect from students?",
+    "answer": "Companies expect strong programming skills, problem-solving ability, knowledge of data structures, communication skills, teamwork, and basic understanding of software development."
+  },
+  {
+    "question": "Which programming languages should students focus on?",
+    "answer": "Students should focus on languages like C, C++, Java, Python, and JavaScript depending on their career goals."
+  },
+  {
+    "question": "How can students improve their technical skills?",
+    "answer": "Students can improve technical skills by building projects, contributing to open source, participating in hackathons, practicing coding regularly, and learning from online platforms."
+  },
+  {
+    "question": "What technical events are conducted?",
+    "answer": "The department conducts hackathons, coding competitions, workshops, seminars, and technical talks to enhance student skills."
+  },
+  {
+    "question": "Can students from any stream apply for MCA?",
+    "answer": "Students from any stream can apply for MCA, but they must have Mathematics in 12th or graduation."
+  },
+  {
+    "question": "What type of test is conducted for MCA admission?",
+    "answer": "For MCA admission, a screening test and/or programming (coding) test is conducted."
+  },
+  {
+    "question": "Where is the Department of Computer Applications located?",
+    "answer": "The Department of Computer Applications is located within the CSJM University campus in Kanpur, Uttar Pradesh."
+  },
+  {
+    "question": "Can I visit the department for admission inquiry?",
+    "answer": "Yes, you can visit the department during working hours (10:00 AM to 5:00 PM) for admission-related inquiries."
+  },
+{
+    "question": "What clubs are available in the Department of Computer Applications?",
+    "answer": "The department offers various clubs including Coding & Robotics Club, Cultural Club, Literary Club, Fitness Club, Cooking Club, Gardening Club, and Photography Club. These clubs are coordinated under Aatmoday by Dr. Mamta Tiwari."
+  },
+{
+    "question": "What events are Hosted in the Department of Computer Applications?",
+    "answer": "The department organizes various technical and cultural events such as TechFest 2K24, TechFest 2K25, Code Cluster 2023, and TechSanskriti 2026. Apart from these, regular cultural and technical events are also conducted throughout the year."
+  }
+
+]
