@@ -2,6 +2,7 @@ import os
 import json
 import re
 import asyncio
+import time
 from difflib import SequenceMatcher
 from typing import List
 from fastapi import FastAPI, HTTPException
@@ -31,10 +32,29 @@ llm = None
 dataset = []
 bm25 = None
 bm25_corpus_tokens = []
+gemini_cooldown_until = 0.0
 
 
 def _normalize(text: str) -> list[str]:
     return re.findall(r"\w+", text.lower(), flags=re.UNICODE)
+
+
+def detect_language_style(text: str) -> str:
+    t = text.lower()
+
+    # Devanagari Hindi
+    if re.search(r"[\u0900-\u097F]", text):
+        return "hindi"
+
+    # Common Roman Hindi/Hinglish markers
+    hinglish_markers = [
+        "kya", "kaise", "batao", "bolo", "chahiye", "hai", "hain", "nahi", "kyu", "kyun",
+        "mai", "main", "mera", "meri", "mere", "ka", "ki", "ke", "wala", "liye", "kr", "kar",
+    ]
+    if any(m in t.split() for m in hinglish_markers):
+        return "hinglish"
+
+    return "english"
 
 
 def _score_query(user_query: str, candidate_question: str) -> float:
@@ -163,6 +183,8 @@ class ChatQuery(BaseModel):
 
 @app.post("/chat")
 async def chat_endpoint(query: ChatQuery):
+    global gemini_cooldown_until
+
     if not dataset:
         raise HTTPException(status_code=500, detail="Dataset not loaded on server.")
     
@@ -170,14 +192,19 @@ async def chat_endpoint(query: ChatQuery):
         raise HTTPException(status_code=500, detail="AI Model not initialized. Check API Key.")
 
     try:
+        style = detect_language_style(query.message)
+
         # 🔍 Step 1: Retrieve with hybrid BM25 + lexical matcher
         top_k = int(os.getenv("RETRIEVAL_TOP_K", "12"))
         max_context_chars = int(os.getenv("MAX_CONTEXT_CHARS", "14000"))
         matches = get_top_matches(query.message, k=top_k)
 
         # Fast path: if retrieval is very confident, avoid LLM call (prevents quota/rate failures)
+        # For Hinglish/Hindi users, prefer LLM when available so style is preserved.
+        now = time.time()
+        in_cooldown = now < gemini_cooldown_until
         direct_answer = get_direct_answer_if_confident(matches)
-        if direct_answer:
+        if direct_answer and (style == "english" or in_cooldown):
             return {"response": direct_answer}
 
         context = build_context(matches, max_chars=max_context_chars)
@@ -186,6 +213,16 @@ async def chat_endpoint(query: ChatQuery):
         history_text = "\n".join(
             [f"{msg.get('role', 'user').upper()}: {msg.get('content', '')}" for msg in recent_history]
         )
+
+        # If Gemini is in cooldown due to recent quota/rate-limit errors, skip LLM call.
+        if now < gemini_cooldown_until:
+            if matches:
+                if style == "hinglish":
+                    return {"response": f"Network thoda busy hai. Department data ke basis par: {matches[0].get('answer', 'Please try again shortly.')}"}
+                if style == "hindi":
+                    return {"response": f"AI सेवा अभी अस्थायी रूप से व्यस्त है। विभागीय डेटा के आधार पर: {matches[0].get('answer', 'Please try again shortly.')}"}
+                return {"response": matches[0].get("answer", "Please try again shortly.")}
+            return {"response": "Please try again shortly."}
 
         # 🧠 Step 2: Build prompt
         final_prompt = f"""You are a professional BCA & MCA Admission Assistant.
@@ -196,6 +233,7 @@ Important rules:
 3) Use only the retrieved context below for factual details.
 4) If context does not contain the answer, clearly say you don't have that information.
 5) Reply in the same language style as the user (English/Hindi/Hinglish), concise and helpful.
+6) If user writes Hinglish, reply in natural Hinglish (Roman Hindi), not pure English.
 
 Recent chat history (for conversational continuity):
 {history_text if history_text else 'No prior history.'}
@@ -235,6 +273,10 @@ Assistant Answer:"""
                     for token in ["429", "quota", "resource_exhausted", "temporarily", "timeout", "503", "unavailable"]
                 )
 
+                if any(token in err_text for token in ["429", "quota", "resource_exhausted"]):
+                    cooldown_seconds = int(os.getenv("GEMINI_COOLDOWN_SECONDS", "45"))
+                    gemini_cooldown_until = time.time() + cooldown_seconds
+
                 if attempt < max_retries and is_retryable:
                     await asyncio.sleep(1.2 * (attempt + 1))
                     continue
@@ -242,12 +284,7 @@ Assistant Answer:"""
 
         # Final fallback: return top retrieved answer if available
         if matches:
-            return {
-                "response": (
-                    f"I had a temporary AI service issue, but based on available department data:\n\n"
-                    f"{matches[0].get('answer', "Please try again shortly.")}"
-                )
-            }
+            return {"response": matches[0].get("answer", "Please try again shortly.")}
 
         print(f"Server Error after retries: {str(last_error) if last_error else 'Unknown Gemini error'}")
         return {"response": "I'm having trouble connecting to my brain (AI service). Please try again in a moment."}
@@ -258,10 +295,12 @@ Assistant Answer:"""
 
 @app.get("/health")
 def health():
+    cooldown_left = max(0, int(gemini_cooldown_until - time.time()))
     return {
         "status": "ok", 
         "dataset_loaded": len(dataset) > 0,
         "dataset_count": len(dataset),
         "bm25_ready": bm25 is not None,
-        "gemini_ready": llm is not None
+        "gemini_ready": llm is not None,
+        "gemini_cooldown_seconds_left": cooldown_left
     }
